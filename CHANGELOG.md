@@ -5,6 +5,15 @@ All notable changes to gose are documented in this file. For the full commit-lev
 
 ## Unreleased
 
+### Added
+
+- Native Go **fuzz targets** for the JOSE parsing surface (`jose/fuzz_test.go`, `fuzz_test.go`):
+  compact JWE and JWS parsing, the strict base64url decoder, the `aud`/`x5c`/`x5t` member
+  decoders, the JWKS document decoder, the JWK entry point, the common JWK field consistency
+  check, the public `LoadJws` loader and the base64url-to-`big.Int` member decoder. They need no
+  token, their seed corpora run under `go test ./...`, and the monthly `fuzz` workflow
+  (`.github/workflows/fuzz.yml`) runs the open-ended search.
+
 ### Changed
 
 - Build and test toolchain bumped from `go1.27.2` to `go1.27.3` (`toolchain` directive in
