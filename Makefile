@@ -92,16 +92,25 @@ gosec:
 	$(GOSEC) ./...
 
 ## Licenses
-# Generated via a temp file: redirecting straight into NOTICES.md truncates it
+# Generated via a temp file: redirecting straight into NOTICE.md truncates it
 # to zero bytes whenever go-licenses fails, destroying the committed file before
 # anyone sees the error. Write, then move only on success.
+#
+# Runtime dependencies are listed first. Test-only dependencies are listed in a
+# separate "Test-only dependencies" section, computed as the set difference
+# between the --include_tests report and the runtime report.
 GO_LICENSES ?= go-licenses
 
 notices:
 	$(call require,$(GO_LICENSES),go install github.com/google/go-licenses@latest)
-	@{ $(GO_LICENSES) report ./... --ignore github.com/eclipse-keypont/gose,github.com/eclipse-keypont/crypto11/v2,github.com/eclipse-keypont/pkcs11-go --template go-licenses.tpl > NOTICES.md.tmp && \
-	   mv NOTICES.md.tmp NOTICES.md; } || { rm -f NOTICES.md.tmp; exit 1; }
-	@echo "NOTICES.md generated"
+	@{ $(GO_LICENSES) report ./... --ignore github.com/eclipse-keypont/gose --template go-licenses.tpl > NOTICE.md.tmp && \
+	   $(GO_LICENSES) report ./... --include_tests --ignore github.com/eclipse-keypont/gose --template go-licenses.tpl > NOTICE.md.all.tmp && \
+	   ( grep -vxF -f NOTICE.md.tmp NOTICE.md.all.tmp || true ) > NOTICE.md.test.tmp && \
+	   cat NOTICE.md.tmp > NOTICE.md.new && \
+	   { [ ! -s NOTICE.md.test.tmp ] || { printf '\n## Test-only dependencies\n\nThe following modules are used only by the test suite. They are not compiled into the released artifact and are therefore not part of what consumers link against.\n\n| Package | License | License URL |\n|---------|---------|-------------|\n' >> NOTICE.md.new && cat NOTICE.md.test.tmp >> NOTICE.md.new; }; } && \
+	   mv NOTICE.md.new NOTICE.md; } || { rm -f NOTICE.md.tmp NOTICE.md.all.tmp NOTICE.md.test.tmp NOTICE.md.new; exit 1; }
+	@rm -f NOTICE.md.tmp NOTICE.md.all.tmp NOTICE.md.test.tmp
+	@echo "NOTICE.md generated"
 
 # ── Clean ────────────────────────────────────────────────────────────────────
 clean:
