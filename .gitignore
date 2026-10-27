@@ -35,3 +35,9 @@ go.work
 
 # Code assistants
 .claude
+
+# scratch files `make notices` writes before atomically replacing NOTICE.md
+NOTICE.md.tmp
+NOTICE.md.all.tmp
+NOTICE.md.test.tmp
+NOTICE.md.new

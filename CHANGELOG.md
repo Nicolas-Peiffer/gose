@@ -204,7 +204,7 @@ second major version onward).
 - A Cryptography Bill of Materials (CBOM) under `assets/cbom/`.
 - `make release VERSION=x.y.z`, `make lint`, `make lint-fix`, `make notices`, `make version` and
   `make govulncheck` Makefile targets.
-- `go-licenses`-generated `NOTICES.md` third-party license report.
+- `go-licenses`-generated `NOTICE.md` third-party license report.
 
 ### Changed
 

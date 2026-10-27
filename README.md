@@ -122,7 +122,7 @@ On top of that, each release is independently signed and attested:
 
 ## Third-party notices
 
-[`NOTICES.md`](./NOTICES.md) lists all third-party dependency licenses and is auto-generated via `make notices` (requires [`go-licenses`](https://github.com/google/go-licenses)).
+[`NOTICE.md`](./NOTICE.md) lists all third-party dependency licenses and is auto-generated via `make notices` (requires [`go-licenses`](https://github.com/google/go-licenses)).
 
 ## Vulnerability check
 
